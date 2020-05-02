@@ -1,10 +1,12 @@
 #include "/home/rafaeldali/Pulpit/Dane do programów/zad3-zalazek/inc/UkladRownanLiniowych.hh"
+#include "/home/rafaeldali/Pulpit/Dane do programów/zad3-zalazek/inc/LZespolona.hh"
 #include <cmath>
 using namespace std;
 
-const Macierz UkladRownanLiniowych::wstaw_kolumne (int i, Macierz M, Wektor W) const
+template <class TYP, int ROZM>
+const Macierz<TYP,ROZM> UkladRownanLiniowych<TYP,ROZM>::wstaw_kolumne (int i, Macierz<TYP,ROZM> M, Wektor<TYP,ROZM> W) const
 {
-    if (i<0 || i>=ROZMIAR)
+    if (i<0 || i>=ROZM)
     {
         cerr<<"Blad, wyjscie poza tablice";
         exit (1);
@@ -15,72 +17,81 @@ const Macierz UkladRownanLiniowych::wstaw_kolumne (int i, Macierz M, Wektor W) c
     return M;
 }
 
-void UkladRownanLiniowych::blad (UkladRownanLiniowych X, Wektor wynik) const
+template <class TYP, int ROZM>
+const Wektor<TYP,ROZM> UkladRownanLiniowych<TYP,ROZM>::Cramer (UkladRownanLiniowych<TYP,ROZM> X) const
 {
-    cout<<endl<<"Dlugosc wektora bledu: "<<sqrt((A*wynik-W)*(A*wynik-W))<<endl;
-    cout<<"Wektor bledow: "<<A*wynik-W<<endl;
-}
-
-const Wektor UkladRownanLiniowych::Cramer (UkladRownanLiniowych X) const
-{
-    Wektor wynik;
-    int czy_zero=0;
-    double wyz=A.wyznacznik();
-    for (int i=0; i<ROZMIAR; i++)
+    Wektor<TYP,ROZM> wynik;
+    int czy_zero = 0;
+    Macierz<TYP,ROZM> Mac;
+    TYP wyz = A.wyznacznik_gauss(); 
+    for (int i=0; i<ROZM; i++)
     {
-        wynik[i]=wstaw_kolumne(i,A,W).wyznacznik();
-        if (wynik[i]==0)
+        Mac = wstaw_kolumne(i,A,W);
+        wynik[i] = Mac.wyznacznik_gauss();
+        if (wynik[i] == 0.0)
         czy_zero++;
     }
-    if (wyz==0 && czy_zero==ROZMIAR)
+    if (wyz == 0.0  && czy_zero == ROZM)
     {
         cout<<endl<<"Uklad ma nieskonczenie wiele rozwiazan"<<endl;
         exit (0);
     }
-    if (wyz==0 && czy_zero!=ROZMIAR)
+    if (wyz == 0.0 && czy_zero != ROZM)
     {
         cout<<endl<<"Uklad nie ma rozwiazan"<<endl;
         exit (0);
     }
-    for (int i=0; i<ROZMIAR; i++)
-        wynik[i]/=wyz; 
+    for (int i=0; i<ROZM; i++)
+        wynik[i] = wynik[i] / wyz; 
     return wynik;
 } 
 
-Macierz & UkladRownanLiniowych::get_A() 
+template <class TYP, int ROZM>
+const Macierz<TYP,ROZM> & UkladRownanLiniowych<TYP,ROZM>::get_A() const
 {
     return A;
 }
 
-Wektor & UkladRownanLiniowych::get_W() 
+template <class TYP, int ROZM>
+const Wektor<TYP,ROZM> & UkladRownanLiniowych<TYP,ROZM>::get_W() const
 {
     return W;
 }  
 
-void UkladRownanLiniowych::set_A(Macierz & in) const
+template <class TYP, int ROZM>
+void UkladRownanLiniowych<TYP,ROZM>::set_A(Macierz<TYP,ROZM> & in) 
 {
-    in=A;
+    A=in;
 }
 
-void UkladRownanLiniowych::set_W(Wektor & in) const
+template <class TYP, int ROZM>
+void UkladRownanLiniowych<TYP,ROZM>::set_W(Wektor<TYP,ROZM> & in) 
 {
-    in=W;
+    W=in;
 }
 
-std::istream& operator >> (std::istream &Strm, UkladRownanLiniowych &UklRown)
+template <class TYP, int ROZM>
+std::istream& operator >> (std::istream &Strm, UkladRownanLiniowych<TYP,ROZM> &UklRown)
 {
-    Strm>>UklRown.get_A()>>UklRown.get_W();
-    return Strm;
-}
-
-std::ostream& operator << (std::ostream &Strm, const UkladRownanLiniowych &UklRown)
-{
-    Macierz TMPM; Wektor TMPW;
+    
+    Wektor<TYP,ROZM> TMPW;
+    Macierz<TYP,ROZM> TMPM;
+    Strm>>TMPM>>TMPW;
     UklRown.set_A(TMPM);
     UklRown.set_W(TMPW);
-    Strm<<"Macierz:"<<endl<<TMPM<<"Wektor:"<<endl<<TMPW;
-    return Strm;
+    return Strm;    
 }
 
+template <class TYP, int ROZM>
+std::ostream& operator << (std::ostream &Strm, const UkladRownanLiniowych<TYP,ROZM> &UklRown)
+{
+    Macierz<TYP,ROZM> TMPM = UklRown.get_A();
+    Wektor<TYP,ROZM> TMPW = UklRown.get_W();
+    for (int i=0; i<ROZM; i++)
+    {
+        Strm<<TMPM[i]<<" ["<<TMPW[i]<<"]"<<endl;
+    }
+    return Strm;
+}
     
 

@@ -78,9 +78,11 @@ std::ostream& operator << (std::ostream &Strm, const Wektor<TYP, ROZM> &Wek)
     cout<<"[";
     for (int i=0; i<ROZM-1; i++)
     {
-        cout<<Wek[i]<<" ";
+        Strm<<Wek[i];
+        cout<<" ";
     }
-    cout<<Wek[ROZM-1]<<"]";
+    Strm<<Wek[ROZM-1];
+    cout<<"]";
     return Strm;
 }
 
@@ -129,23 +131,51 @@ const Wektor<TYP,ROZM> Wektor<TYP, ROZM>::operator * (TYP l) const /* Wektor raz
     return wynik;
 }
 
-/*
 template <class TYP, int ROZM> 
 const Wektor<TYP,ROZM> Wektor<TYP, ROZM>::operator / (TYP l) const 
 {
-    Wektor <TYP,ROZMIAR> wynik;
+    Wektor <TYP,ROZM> wynik;
     if (l==0.0)
     {
         cerr<<"Blad, dzielenie przez 0";
         exit (1);
     }
-    for (int i=0; i<ROZMIAR; i++)
+    for (int i=0; i<ROZM; i++)
     {
         wynik[i]=tabW[i]/l;
     }
     return wynik;
 }
-*/
+
+template <> const Wektor<LZespolona,5> Wektor<LZespolona, 5>::operator / (LZespolona l) const 
+{
+    Wektor <LZespolona,5> wynik;
+    if (l.re==0.0 && l.im==0.0)
+    {
+        cerr<<"Blad, dzielenie przez 0";
+        exit (1);
+    }
+    for (int i=0; i<5; i++)
+    {
+        wynik[i]=tabW[i]/l;
+    }
+    return wynik;
+}
+
+template <> const Wektor<LZespolona,3> Wektor<LZespolona, 3>::operator / (LZespolona l) const 
+{
+    Wektor <LZespolona,3> wynik;
+    if (l.re==0.0 && l.im==0.0)
+    {
+        cerr<<"Blad, dzielenie przez 0";
+        exit (1);
+    }
+    for (int i=0; i<3; i++)
+    {
+        wynik[i]=tabW[i]/l;
+    }
+    return wynik;
+}
 
 template <class TYP, int ROZM>
 bool Wektor<TYP, ROZM>::operator == (const Wektor<TYP, ROZM> & W2) const
@@ -153,31 +183,9 @@ bool Wektor<TYP, ROZM>::operator == (const Wektor<TYP, ROZM> & W2) const
     double epsilon=0.000000000000001; int i;
     for (i=0; i<ROZM; i++)
     {
-        if(this->tabW[i]-W2[i]>epsilon)
+        if(abs(tabW[i]-W2[i])>epsilon)
         return false;
     }
-    return true;
-}
-
-template <> bool Wektor<LZespolona,5>::operator == (const Wektor<LZespolona,5> & W2) const  /********/
-{
-    Wektor<LZespolona,5> Wynik;
-    double epsilon=0.00000001;
-    int i;
-    for(i=0;i<5;i++)
-    if(abs(tabW[i].modul()-W2[i].modul())>epsilon)
-    return false;
-    return true;
-}
-
-template <> bool Wektor<LZespolona,3>::operator==(const Wektor<LZespolona,3> & W2) const  /********/
-{
-    Wektor<LZespolona,3> Wynik;
-    double epsilon=0.00000001;
-    int i;
-    for(i=0;i<3;i++)
-    if(abs(tabW[i].modul()-W2[i].modul())>epsilon)
-    return false;
     return true;
 }
 
@@ -186,40 +194,8 @@ bool Wektor<TYP, ROZM>::operator != (const Wektor<TYP, ROZM> & W2) const
 {      
     return !(*this==W2);
 }
-/*
-template <class TYP, int ROZM>
-const TYP Wektor<TYP, ROZM>::dlugosc () const
-{
-    double wynik;
-    for (int i=0; i<ROZMIAR; i++)
-    {
-        wynik+=pow(tabW[i],2);
-    }
-    return sqrt(wynik);
-}
-*/
-/*
-template std::istream & operator>>(std::istream &strm, Wektor<double,ROZMIAR> &W);
-template std::ostream & operator<< (std::ostream &strm, const Wektor<double,ROZMIAR> &W);
-template const Wektor <double,ROZMIAR> Wektor <double,ROZMIAR>::operator+ (const Wektor <double, ROZMIAR> & W2) const;
-template const Wektor <double,ROZMIAR> Wektor <double,ROZMIAR>::operator- (const Wektor <double, ROZMIAR> & W2) const;
-template const double Wektor <double,ROZMIAR>::operator * (const Wektor <double, ROZMIAR> & W2) const;
-template const Wektor <double,ROZMIAR> Wektor <double,ROZMIAR>::operator * (double l) const;
-template const Wektor <double,ROZMIAR> Wektor <double,ROZMIAR>::operator / (double l) const;
-template bool Wektor <double,ROZMIAR>::operator == (const Wektor <double, ROZMIAR> & W2) const;
-template bool Wektor <double,ROZMIAR>::operator != (const Wektor <double, ROZMIAR> & W2) const;
-template const double Wektor <double,ROZMIAR>::dlugosc () const;
 
-template std::istream & operator>>(std::istream &strm, Wektor<LZespolona,ROZMIAR> &W);
-template std::ostream & operator<< (std::ostream &strm, const Wektor<LZespolona,ROZMIAR> &W);
-template const Wektor <LZespolona,ROZMIAR> Wektor <LZespolona,ROZMIAR>::operator+ (const Wektor <LZespolona, ROZMIAR> & W2) const;
-template const Wektor <LZespolona,ROZMIAR> Wektor <LZespolona,ROZMIAR>::operator- (const Wektor <LZespolona, ROZMIAR> & W2) const;
-template const LZespolona Wektor <LZespolona,ROZMIAR>::operator * (const Wektor <LZespolona, ROZMIAR> & W2) const;
-template const Wektor <LZespolona,ROZMIAR> Wektor <LZespolona,ROZMIAR>::operator * (LZespolona l) const; 
-template const Wektor <LZespolona,ROZMIAR> Wektor <LZespolona,ROZMIAR>::operator / (LZespolona l) const; ,
-template bool Wektor <LZespolona,ROZMIAR>::operator == (const Wektor <LZespolona, ROZMIAR> & W2) const;
-template bool Wektor <LZespolona,ROZMIAR>::operator != (const Wektor <LZespolona, ROZMIAR> & W2) const;
-*/
+
 
 
 

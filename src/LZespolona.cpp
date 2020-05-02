@@ -23,16 +23,6 @@ LZespolona & LZespolona::operator = (double i)
   return *this;
 }
 
-/*
-bool & LZespolona::operator > (LZespolona l)
-{
-  if (
-  return true;
-  else 
-  return false;
-}
-*/
-
 LZespolona Sprzezenie (LZespolona lz)
 {
   lz.im = -lz.im;
@@ -62,10 +52,16 @@ double Modul2 (LZespolona lz)
  *    modul liczby zespolonej.
  */
 
-double LZespolona::modul () const /************************************************/
+double LZespolona::modul () const 
 {
   double modulo=sqrt(pow(re,2)+pow(im,2));
   return modulo;
+}
+
+double abs (LZespolona lz) /*********************************/
+{
+  double Wynik=lz.modul();
+  return Wynik;
 }
 
 LZespolona operator / (LZespolona lz, double r)
@@ -168,11 +164,10 @@ LZespolona  operator * (LZespolona  Skl1,  LZespolona  Skl2)
 
 LZespolona  operator / (LZespolona  Skl1,  LZespolona  Skl2)
 {
-  LZespolona Wynik, Sprze;
-  double Mod;
-  Sprze = Sprzezenie(Skl2);
-  Mod = Modul2(Skl2);
-  Wynik= (Skl1 * Sprze) / Mod;
+  LZespolona Wynik;
+  LZespolona Sprze=Sprzezenie(Skl2);
+  double Mod=Modul2(Skl2);
+  Wynik= (Skl1 * Sprze) / pow(Mod,2);
   return Wynik;  
 }
 /*!
@@ -184,23 +179,26 @@ LZespolona  operator / (LZespolona  Skl1,  LZespolona  Skl2)
  *    Iloraz dwoch skladnikow bedacych liczbami zespolonymi, przekazanych jako parametry.
  */
 
-/*
-LZespolona  operator / (LZespolona  Skl1, double l) 
-{
-  LZespolona  Wynik;
-
-  Wynik.re = Skl1.re/l;
-  Wynik.im = Skl1.im/l;
-  return Wynik;
+bool operator == (LZespolona  Skl1,  LZespolona  Skl2){
+double epsilon=0.0000000000000000001;
+if(abs(Skl1.re-Skl2.re)<epsilon && abs(Skl1.im-Skl2.im)<epsilon)
+return true;
+else
+return false;
 }
-*/
 
-bool operator == (LZespolona  Skl1,  LZespolona  Skl2)
+bool operator != (LZespolona  Skl1,  LZespolona  Skl2)
 {
-  bool Wynik = false;
-  if (Skl1.re == Skl2.re && Skl1.im == Skl2.im)
-    Wynik = true;
-  return Wynik;
+  return !(Skl1==Skl2);
+}
+
+bool operator == (LZespolona Skl1, double Skl2)
+{
+  double epsilon= 0.0000000000000001;
+  if (abs(Skl1.re-Skl2)<=epsilon && abs(Skl1.im-Skl2)<=epsilon)
+    return true;
+  else
+    return false;
 }
 /*!
  * Porownuje dwie liczby zespolone i sprawdza, czy sa takie same.
@@ -212,12 +210,9 @@ bool operator == (LZespolona  Skl1,  LZespolona  Skl2)
  *    Wartosc false, gdy liczby przekazane przez parametry sa od siebie rozne.
  */
 
-bool operator != (LZespolona  Skl1,  LZespolona  Skl2)
+bool operator != (LZespolona Skl1, double Skl2)
 {
-  bool Wynik = false;
-  if (Skl1.re != Skl2.re || Skl1.im != Skl2.im)
-    Wynik = true;
-  return Wynik;
+  return !(Skl1==Skl2);
 }
 
 std::istream & operator >> (std::istream & strm,  LZespolona &Liczba) 
@@ -233,4 +228,3 @@ std::ostream & operator << (std::ostream & strm, const LZespolona &Liczba)
   return strm<<"("<<Liczba.re<<std::showpos<<Liczba.im<<std::noshowpos<<"i)";
 }
 
-/*Przeciazenie operatora wyjscia dla wyrazenia zespolonego znajduje się w WyrazenieZesp.cpp*/

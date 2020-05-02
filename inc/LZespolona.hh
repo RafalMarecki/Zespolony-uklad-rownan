@@ -30,13 +30,16 @@ struct  LZespolona {
  * Dalej powinny pojawic sie zapowiedzi definicji przeciazen operatorow
  */
 LZespolona Utworz (double re, double im);
-
+double abs (LZespolona lz);
 LZespolona  operator + (LZespolona  Skl1,  LZespolona  Skl2);
 LZespolona  operator - (LZespolona  Skl1,  LZespolona  Skl2);
 LZespolona  operator * (LZespolona  Skl1,  LZespolona  Skl2);
 LZespolona  operator / (LZespolona  Skl1,  LZespolona  Skl2);
-LZespolona  operator / (LZespolona  Skl1, double l);
+//LZespolona  operator / (LZespolona  Skl1, double l);
 bool operator == (LZespolona  Skl1,  LZespolona  Skl2);
+bool operator != (LZespolona  Skl1,  LZespolona  Skl2);
+bool operator == (LZespolona Skl1, double Skl2);
+bool operator != (LZespolona Skl1, double Skl2);
 std::istream & operator >> (std::istream & strm,  LZespolona &Liczba);
 std::ostream & operator << (std::ostream & strm, const LZespolona &Liczba);
 /*bool Wczytaj_LZespolona (LZespolona &Liczba);*/

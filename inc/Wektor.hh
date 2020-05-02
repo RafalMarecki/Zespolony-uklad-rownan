@@ -1,8 +1,8 @@
 #ifndef WEKTOR_HH
 #define WEKTOR_HH
 
-#include "rozmiar.h"
-#include "LZespolona.hh"
+#include "/home/rafaeldali/Pulpit/Dane do programów/zad3-zalazek/inc/rozmiar.h"
+#include "/home/rafaeldali/Pulpit/Dane do programów/zad3-zalazek/inc/LZespolona.hh"
 #include <iostream>
 
 template <class TYP, int ROZM>
