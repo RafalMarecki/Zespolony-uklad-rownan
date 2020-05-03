@@ -77,6 +77,7 @@ std::istream& operator >> (std::istream &Strm, UkladRownanLiniowych<TYP,ROZM> &U
     Wektor<TYP,ROZM> TMPW;
     Macierz<TYP,ROZM> TMPM;
     Strm>>TMPM>>TMPW;
+    TMPM=TMPM.transpozycja();
     UklRown.set_A(TMPM);
     UklRown.set_W(TMPW);
     return Strm;    
